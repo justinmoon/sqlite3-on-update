@@ -73,15 +73,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1aab8fc367588b89dcee83ab0fd66b72b50b72fa1904d7095045ace2b0c81c35"
 
 [[package]]
-name = "jiggy-neon"
-version = "0.1.0"
-dependencies = [
- "neon",
- "rusqlite",
- "serde_json",
-]
-
-[[package]]
 name = "libc"
 version = "0.2.121"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -243,6 +234,15 @@ name = "smallvec"
 version = "1.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f2dd574626839106c320a323308629dcb1acfc96e32a8cba364ddc61ac23ee83"
+
+[[package]]
+name = "sqlite3-on-update"
+version = "0.1.0"
+dependencies = [
+ "neon",
+ "rusqlite",
+ "serde_json",
+]
 
 [[package]]
 name = "syn"
