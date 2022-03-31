@@ -1,5 +1,5 @@
 {
-  "name": "jiggy-neon",
+  "name": "sqlite3-on-update",
   "version": "0.1.0",
   "description": "",
   "main": "index.node",

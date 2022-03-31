@@ -25,18 +25,38 @@ pub fn on_update(mut cx: FunctionContext) -> JsResult<JsUndefined> {
         },
     ));
 
-    // test it works (this panics)
-    // conn.execute(
-    //     "INSERT INTO test (text) VALUES ('foo')",
-    //     rusqlite::params![],
-    // )
-    // .unwrap();
-
     Ok(cx.undefined())
 }
 
-#[neon::main]
-fn main(mut cx: ModuleContext) -> NeonResult<()> {
-    cx.export_function("onUpdate", on_update)?;
-    Ok(())
+fn test_on_update(conn: &Connection) {
+    conn.update_hook(Some(
+        move |update: Action, db_name: &str, table_name: &str, row_id: i64| {
+            let message = format!("{}:{}", table_name, row_id);
+            dbg!("rust: ", &message);
+        },
+    ));
+    let ten_millis = time::Duration::from_millis(10);
+
+    thread::sleep(ten_millis);
+}
+
+use std::{thread, time};
+
+fn main() {
+    let conn = Connection::open("test.db").unwrap();
+    let c2 = Connection::open("test.db").unwrap();
+    let delay = time::Duration::from_secs(3);
+    test_on_update(&conn);
+
+    loop {
+        println!("sleeping for 3  sec ");
+        thread::sleep(delay);
+        conn.execute(
+            "INSERT INTO test (text) VALUES ('foo')",
+            rusqlite::params![],
+        )
+        .unwrap();
+        c2.execute("INSERT INTO test (text) VALUES ('c2')", rusqlite::params![])
+            .unwrap();
+    }
 }
